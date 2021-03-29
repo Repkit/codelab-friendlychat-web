@@ -1,0 +1,14 @@
+evTQhaEhrOoBd9azRGZbnf:APA91bEdNllvw0GzBs_OEn1GzwWawo6SHreQGQP7n18v4pSAhLiWpbIt0YeIi8dnCaa6ud3-VFFgdrUrRGIl1mmYvn6JcdIBFxY96f373dFC_jIeJ7zkIscKlZMHEZExUG3usHf-DPcf
+
+curl -H "Content-Type: application/json" \
+     -H "Authorization: key=AAAAI-6W9C0:APA91bGByTTW5LVN9I3Do8f96E_2iSdJK1qyKZvl3QVN1mD75q4REiGBD_SNbGmmnilOwLOIxYXKY7qRD2X-BIHHQk1aRJ2Q-mejYkRWA_fqdKxHRZIIFqD3PKTBCv-WuIN3ZiMhOtYH" \
+     -d '{
+           "notification": {
+             "title": "New chat message!",
+             "body": "There is a new message in FriendlyChat",
+             "icon": "/images/profile_placeholder.png",
+             "click_action": "http://localhost:5000"
+           },
+           "to": "evTQhaEhrOoBd9azRGZbnf:APA91bEdNllvw0GzBs_OEn1GzwWawo6SHreQGQP7n18v4pSAhLiWpbIt0YeIi8dnCaa6ud3-VFFgdrUrRGIl1mmYvn6JcdIBFxY96f373dFC_jIeJ7zkIscKlZMHEZExUG3usHf-DPcf"
+         }' \
+     https://fcm.googleapis.com/fcm/send
