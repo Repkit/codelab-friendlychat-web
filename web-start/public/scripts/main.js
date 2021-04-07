@@ -63,7 +63,16 @@ function isUserSignedIn() {
 function saveMessage(room, messageText) {
   // TODO 7: Push a new message to Firebase.
   // Add a new message entry to the database.
-//   var messageRef = db.collection('rooms').doc('roomA').collection('messages').doc('message1');
+  // var messageRef = db.collection('rooms').doc('roomA').collection('messages').doc('message1');
+
+  // save for notification
+  firebase.firestore().collection('notifications').doc(qroom).collection('notification').doc(me).set({
+    messages: firebase.firestore.FieldValue.increment(1),
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(function(error) {
+    console.error('Error writing new message to database', error);
+  });
+
   // return firebase.firestore().collection('messages').add({
   return firebase.firestore().collection('rooms').doc(room).collection('messages').add({
     name: getUserName(),
@@ -450,7 +459,7 @@ function generateRoom(user){
     if(typeof room !== 'undefined' && room.length > 0) {
         return room;
     }
-    var me = MD5(unescape(encodeURIComponent(user.email.toLocaleLowerCase())));
+    me = MD5(unescape(encodeURIComponent(user.email.toLocaleLowerCase())));
     console.log(me); //7fbcc48c877943cba122e8209e50ab01
 
     // var partner = MD5(unescape(encodeURIComponent(qroom.toLocaleLowerCase())));
@@ -473,7 +482,7 @@ var MD5 = function(d){var r = M(V(Y(X(d),8*d.length)));return r.toLowerCase()};f
 const urlParams = new URLSearchParams(window.location.search);
 const qroom = urlParams.get('room');
 
-var room;
+var room, me;
 // const qroom = 'farove5671@bombaya.com';
 // const qroom = 'f1be2a5ce76f53a01351626cf459e3f7';
 // 1cf398db9586bf81b0bdaaac23a928db newsletter.bymistake@gmail.com
