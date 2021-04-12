@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>get firestore notifications</title>
+    </head>
+    <body>
+        <p id="notify">you have no notifications</p>
+        <ul id="notify-rooms"></ul>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+        
+
+        <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-analytics.js"></script>
+
+        <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyAgwSfdlD2pvbIeyb87rw7yIDadjXyRAUc",
+            authDomain: "rpk-friendlychat.firebaseapp.com",
+            projectId: "rpk-friendlychat",
+            storageBucket: "rpk-friendlychat.appspot.com",
+            messagingSenderId: "154326725677",
+            appId: "1:154326725677:web:1b90d14df9c7740e8474a4",
+            measurementId: "G-TDJRW52ST7"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+            // Create a reference to the cities collection
+            var query = firebase.firestore()
+                  .collection('notifications').doc("28e46391cd7dc1c8bcc8a9e8c14f4477").collection('notification');
+                  // .orderBy('timestamp', 'desc')
+                  // .limit(12);
+
+            var ul = document.getElementById("notify-rooms");
+            // Start listening to the query.
+            query.onSnapshot(function(snapshot) {
+                snapshot.docChanges().forEach(function(change) {
+                if (change.type === 'removed') {
+                    // deleteMessage(change.doc.id);
+                    console.log('notificatio removed');
+                } else {
+                    var notification = change.doc.data();
+                    console.log(change.doc.id, notification.timestamp, notification.messages);
+                    var n = document.getElementById('notify');
+                    n.style.display = "none";
+
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode(change.doc.id));
+                    li.setAttribute("onclick","openchat(this,'"+change.doc.id+"')");
+
+                    // var a = document.createElement('a');
+                    // a.href =  'google.com'; // Insted of calling setAttribute 
+                    // a.innerHTML = "Link" // <a>INNER_TEXT</a>
+                    // leftDiv.appendChild(a); // Append the link to the div
+
+                    ul.appendChild(li);
+                }
+                });
+            });
+
+            function openchat(el,room) {
+                el.style.display = "none";
+                window.open('https://rpk-friendlychat.firebaseapp.com?room='+room,'chat','width=600,height=400');
+                firebase.firestore()
+                  .collection('notifications').doc("28e46391cd7dc1c8bcc8a9e8c14f4477").collection('notification')
+                  .doc(room).delete().then(() => {
+                        console.log("Document successfully deleted!");
+                    }).catch((error) => {
+                        console.error("Error removing document: ", error);
+                    });
+            }
+        </script>
+    </body>
+</html>
